@@ -8,24 +8,25 @@ using namespace std;
 当实现图形界面的时候关闭输入，把画面留给easyx
 */
 
-//这是游戏系统，给玩家看的
-class GameSystem : public Event {
-	private:
-		int playerx = 0, playery = 0; //当然，这里的player是光标
-		bool isGameStart = false; 	//检测游戏是否开始
-		void generate_map(char gm[256][256]) {
+class Map {
+	public:
+		void generate_map(MC gm[256][256]) {
 			srand(time(0));
 			for (int y = 0; y < 256; y++) {
 				for (int x = 0; x < 256; x++) {
-					int r = rand() % 10;
-					if (r <= 3 && r != 1) gm[y][x] = '@';     // 水源
-					else if (r == 1) gm[y][x] = '&'; // 食物
-					else gm[y][x] = '.';           // 空地
+					gm[y][x].type = rand() % TypeMax;
 				}
 			}
-		} //生成随机地图
+		}
+};
 
+//这是游戏系统，给玩家看的
+class GameSystem : public Event, public Map {
+	private:
+		int playerx = 0, playery = 0; //当然，这里的player是光标
+		bool isGameStart = false; 	//检测游戏是否开始
 		double DrawAchievement(Survivor& pvp_dalao) {
+			temp1 = 1;
 			while (1) {
 				system("cls");
 				cout << "按q键退出，wsad上下左右" << endl;
@@ -216,14 +217,17 @@ class GameSystem : public Event {
 				cout << "输入你的存档名：";
 				cin >> FileName;
 				saveGame(player, FileName);
+				temp1 = 1;
 				return 0;
 			}
 			else if(temp == "9") return DrawAchievement(player);
 			else if(temp == "10"){
+				temp1 = 1;
 				isGameStart = 0;
 				Game();
 			}
 			else {
+				temp1 = 1;
 				cout << "输入错误";
 				return 0;
 			}
@@ -242,8 +246,8 @@ class GameSystem : public Event {
 			Survivor player;
 			setColor(11);
 
-			if (!isGameStart){
-				StartChoice(player);
+			if (player.state.first){
+				if (!isGameStart) StartChoice(player);
 				if (player.state.first) {
 					generate_map(TW.maps);
 					player.state.first = 0;

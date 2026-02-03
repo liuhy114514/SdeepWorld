@@ -53,10 +53,9 @@ class Event : public Player {
 						cout << "[+] 发现野果！\n";
 				}
 				setColor(15);
+			}else {
+				temp1 = true;
 			}
-		}
-		void WeatherEvent(Survivor& player) {
-
 		}
 		// 游戏时间变化事件
 		void OutTime(Survivor& player, double time) {
@@ -149,8 +148,8 @@ class WeatherAndSeasonSystem : Player { // and SeasonSystem
 		}
 
 		string getWeather() const {
-			const array<const char*, 3> weatherNames = { "晴", "雨", "阴" };
-			const array<const char*, 4> seasonNames = { "春", "夏", "秋", "冬" };
+			const std::array<const char*, 3> weatherNames = { "晴", "雨", "阴" };
+			const std::array<const char*, 4> seasonNames = { "春", "夏", "秋", "冬" };
 			return string(seasonNames[currentSeason]) + "季" + " " + weatherNames[current];
 		}
 		Season getSeason() const {

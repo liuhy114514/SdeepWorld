@@ -193,6 +193,7 @@ class Player {
 					return 0;
 				} else {
 					cout << "水壶中没有水\n";
+					temp1 = 1;
 					return 0;
 				}
 			} else {

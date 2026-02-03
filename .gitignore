@@ -1,5 +1,8 @@
 *.exe
 *.obj
 *.bat
+*.sdp
+*.txt
 /test/
+/.vscode/
 Makefile

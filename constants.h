@@ -7,6 +7,7 @@
 #include <array>
 #include <iomanip>
 #include <iosfwd>
+#include <sstream>
 #include <windows.h>
 #include <algorithm>
 using namespace std;
@@ -27,7 +28,6 @@ struct status {
 	bool Survival_expert = false;
 	//是否拥有庇护所
 	bool hasShelter = false;
-	//是否第一次启动（为真则生成地图）
 	bool first = true;
 };
 // 物品类型
@@ -44,6 +44,14 @@ struct Inventory {
 
 	int capacity = 10;
 };
+
+// 地图类型
+struct mapCell {
+	int type; // 属性
+	string name;  // 名字
+	char c; // 外观
+};
+
 //人物感受
 struct Feel {
 	int HealthLevel = 100;
@@ -75,7 +83,7 @@ struct Survivor {
 	Inventory inventory;
 	status state;
 };
-
+// 世界结构体
 struct World {
 	int day = 1;
 	int month = 1;
@@ -85,7 +93,7 @@ struct World {
 	double date;
 	double temperature; //气温
 	double humidity; //湿度,须使用百分比
-	char maps[256][256]; // 随机地图生成s
+	mapCell maps[256][256]; // 随机地图生成
 };
 
 const string USER_DATA_FILE = "user_data.txt";
@@ -109,6 +117,24 @@ const string Achievement[3] = {
 	" -------------------\n",
 };
 const long long _time = time(NULL);
+const int TypeMax = 5; // 随机地形编号的最大值
+const string item[10] = {
+	"木头",
+	"石头",
+	"浆果",
+	"水",
+	"铁",
+	"金",
+	"水",
+};
+const mapCell boime[10] = {
+	{0, "空地", '.'},
+	{1, "草", ','},
+	{2, "草丛", ','},
+	{3, "树", ','},
+	{4, "水", '~'}
+};
+
 // 变量
 int temp0 = 1;	// 判定天数变化
 int Month[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // 存日期
@@ -139,3 +165,5 @@ void showProgressBar(int value, int maxValue, string name) {
 	setColor(15);
 	cout << " " << value << "/" << maxValue << endl;
 }
+
+typedef mapCell MC;
