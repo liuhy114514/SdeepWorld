@@ -12,6 +12,12 @@
 #include <algorithm>
 using namespace std;
 
+typedef const int cint;
+typedef const unsigned char cuchar;
+typedef const char cchar;
+typedef unsigned char uchar;
+typedef long long ll;
+
 //常量声明
 // 季节
 struct season {
@@ -28,6 +34,7 @@ struct status {
 	bool Survival_expert = false;
 	//是否拥有庇护所
 	bool hasShelter = false;
+	// 第一次启动
 	bool first = true;
 };
 // 物品类型
@@ -50,6 +57,7 @@ struct mapCell {
 	int type; // 属性
 	string name;  // 名字
 	char c; // 外观
+	int color;
 };
 
 //人物感受
@@ -78,7 +86,10 @@ struct TimerStruct {
 //玩家结构体
 struct Survivor {
 	string name;
+	string playerFacing; // 朝向位置的东西
 	int level = 1;
+	int px = 128, py = 128;
+	uchar facing = 0; // 默认朝上
 	Feel feel;
 	Inventory inventory;
 	status state;
@@ -117,7 +128,8 @@ const string Achievement[3] = {
 	" -------------------\n",
 };
 const long long _time = time(NULL);
-const int TypeMax = 5; // 随机地形编号的最大值
+cint TypeMax = 5; // 随机地形编号的最大值
+cint TypeMin = 1; // 随机地形编号的最小值
 const string item[10] = {
 	"木头",
 	"石头",
@@ -128,12 +140,43 @@ const string item[10] = {
 	"水",
 };
 const mapCell boime[10] = {
-	{0, "空地", '.'},
-	{1, "草", ','},
-	{2, "草丛", ','},
-	{3, "树", ','},
-	{4, "水", '~'}
+	{-1, "player", '*', 0x0F},
+	{0, "空", '.', 0x07},
+	{1, "草", ',', 0x02},
+	{2, "草丛", ',', 0x0b},
+	{3, "树", ',', 0x0a},
+	{4, "水", '~', 0x01}
 };
+
+cint PLAYER = 0;
+cint AIR = 1;
+cint GRASS = 2;
+cint TUSSOCK = 3;
+cint TREE = 4;
+cint WATER = 5;
+
+cuchar UP = 0;
+cuchar DOWN = 1;
+cuchar LEFT = 2;
+cuchar RIGHT = 3;
+
+cuchar X = 0;
+cuchar Y = 1; 
+
+cuchar L[4] = {UP, LEFT, DOWN, RIGHT};
+cuchar R[4] = {UP, RIGHT, DOWN, LEFT};
+cchar FC[4][2] = { // facing 转换向量
+	{0, -1}, // UP
+	{0, 1}, // DOWN
+	{-1, 0}, // LEFT
+	{1, 0} // RIGHT
+};
+/*
+0 1
+-1 0
+0 -1
+1 0
+*/
 
 // 变量
 int temp0 = 1;	// 判定天数变化
@@ -151,6 +194,16 @@ season The_Four_Seasons0[4] = { { 2.02, 5.07 },  { 5.07, 8.08  }, { 8.08, 11.08 
 World TW;
 
 // 函数
+/*
+0 = 黑色       8 = 灰色
+1 = 蓝色       9 = 淡蓝色
+2 = 绿色       A = 淡绿色
+3 = 浅绿色     B = 淡浅绿色
+4 = 红色       C = 淡红色
+5 = 紫色       D = 淡紫色
+6 = 黄色       E = 淡黄色
+7 = 白色       F = 亮白色
+*/
 void setColor(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
@@ -164,6 +217,12 @@ void showProgressBar(int value, int maxValue, string name) {
 	for (int i = bars; i < 20; i++) cout << "■";
 	setColor(15);
 	cout << " " << value << "/" << maxValue << endl;
+}
+int getLR(int facing, bool LR){
+	for (int i = 0;i < 4;i++){
+		if (!LR) if (facing == L[i]) return i;
+		else {if (facing == R[i]) return i;}
+	}
 }
 
 typedef mapCell MC;

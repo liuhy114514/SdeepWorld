@@ -1,7 +1,6 @@
 #include <conio.h>
 #include "Event.h"
 #include "Player.h"
-#include "constants.h"
 using namespace std;
 
 /*
@@ -14,8 +13,51 @@ class Map {
 			srand(time(0));
 			for (int y = 0; y < 256; y++) {
 				for (int x = 0; x < 256; x++) {
-					gm[y][x].type = rand() % TypeMax;
+					gm[y][x].type = TypeMin + rand() % (TypeMax - TypeMin + 1);
+					gm[y][x].c = boime[gm[y][x].type].c;
 				}
+			}
+		}
+		void player_move(char m, Survivor &player){
+			switch (m) {
+			case 'w':case 'W':
+				switch (player.facing){
+					case UP:if (player.py > 0) player.py--;break;
+					case DOWN:if (player.py < 255) player.py++;break;
+					case LEFT:if (player.px > 0) player.px--;break;
+					case RIGHT:if (player.px < 255) player.px++;break;
+				}
+				break;
+			case 's':case 'S':
+				switch (player.facing){
+					case UP:if (player.py < 255) player.py++;break;
+					case DOWN:if (player.py > 0) player.py--;break;
+					case LEFT:if (player.px < 255) player.px++;break;
+					case RIGHT:if (player.px > 0) player.px--;break;
+				}
+				break;
+			case 'a':case 'A':player.facing = L[(getLR(player.facing, 0) + 1) % 4];break;
+			case 'd':case 'D':player.facing = R[(getLR(player.facing, 1) + 1) % 4];break;
+			}
+		}
+		void drawMap(MC gm[256][256], Survivor &player,int px, int py){
+			int fx = px + FC[player.facing][X];int fy = py + FC[player.facing][Y];
+			for (int y = max(0, py - 1); y <= min(py + 1, 255); y++){
+				for (int x = max(0, px - 5); x <= min(px + 5, 255); x++) { 
+					if (y == py && x == px) {
+						setColor(boime[PLAYER].color);
+						cout << boime[PLAYER].c;
+					}else if (y == fy && x == fx && fy >= 0 && fy < 256 && fx >= 0 && fx < 256){
+						cout << "█";
+						player.playerFacing = boime[gm[y][x].type].name;
+					}else if((y == fy && x == fx) && !(fy >= 0 && fy < 256 && fx >= 0 && fx < 256)){
+						player.playerFacing = boime[AIR].name;
+					}else {
+						setColor(gm[y][x].color);
+						cout << gm[y][x].c;
+					}
+				}
+				cout << endl;
 			}
 		}
 };
@@ -76,26 +118,12 @@ class GameSystem : public Event, public Map {
 				}
 				// 获取按键输入
 				switch (_getch()) {
-					case 'w':
-					case 'W':
-						if (playery > 0) playery--;
-						break;
-					case 's':
-					case 'S':
-						if (playery < 2) playery++;
-						break;
-					case 'a':
-					case 'A':
-						if (playerx > 0) playerx--;
-						break;
-					case 'd':
-					case 'D':
-						if (playerx < 19) playerx++;
-						break;
-					case 'q':
-					case 'Q':
-						return 0;
-				};
+					case 'w':case 'W':if (playery > 0) playery--;break;
+					case 's':case 'S':if (playery < 2) playery++;break;
+					case 'a':case 'A':if (playerx > 0) playerx--;break;
+					case 'd':case 'D':if (playerx < 19) playerx++;break;
+					case 'q':case 'Q':return 0;
+				}
 			}
 		}
 
@@ -120,8 +148,10 @@ class GameSystem : public Event, public Map {
 			cout << oss.str();
 		}
 
-		void showDate(Survivor& player) {
+		double showDate() {
+			system("cls");
 			setColor(6);
+			cout << "---------------------------";
 			cout << "季节：";
 			if (TW.Season == 0)	cout << "春天" << endl;
 			else if (TW.Season == 1)	cout << "夏天" << endl;
@@ -130,6 +160,8 @@ class GameSystem : public Event, public Map {
 			cout << "第" << TW.year << "年" << " " << "第" << TW.month << "月" << " " << "第" << TW.day << "天" << endl;
 			cout << "当前时间：" << int(TW.date) << "月" << (TW.date - int(TW.date)) * 100 << "日" << " ";
 			showTime(TW.time);
+			cout << "---------------------------";
+			if (_getch() == 'q' || _getch() == 'Q') return 0;
 			cout << endl;
 		}
 		void StartChoice(Survivor& player) {
@@ -170,6 +202,7 @@ class GameSystem : public Event, public Map {
 		}
 
 		string GameChoice(Survivor& player) {
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			string choice;
 			system("cls");
 			setColor(14);
@@ -180,9 +213,9 @@ class GameSystem : public Event, public Map {
 			showProgressBar(player.feel.ThirstLevel, 100, "口渴");
 
 			cout << endl;
-
-			showDate(player);
 			
+			drawMap(TW.maps, player, player.px, player.py);
+
 			setColor(11);
 			cout << "资源：木材:" << player.inventory.wood
 				<< " 石头:" << player.inventory.stone
@@ -194,25 +227,28 @@ class GameSystem : public Event, public Map {
 			setColor(10);
 			cout << "\n1.觅食 2.砍树 3.取水 "
 				<< (!player.state.hasShelter ? "4.建庇护所(需要10个木头)" : "4.进入庇护所")
-				<< "\n5.使用食物 6.饮用水 7.休息 8.保存游戏\n9.成就 10.退出游戏"
+				<< "\n5.使用食物 6.饮用水 7.休息 8.查看手表"
+				<< "\n9.保存游戏\n10.查看成就 11.退出游戏"
+				<< "\nw.前 s.后 a.左 d.右"
 				<< "\n选择：";
 			cin >> choice;
 			
 			return choice;
 		}
-		double GameActions(Survivor& player) {
+		double GameActions(Survivor& player) { // 玩家行动消耗的时间
 			string temp = GameChoice(player);
 			if (temp == "1") return FindFood(player);
 			else if(temp == "2") return CuttingDownTrees(player);
 			else if(temp == "3") return FindWater(player);
 			else if(temp == "4"){
-				if (player.state.hasShelter) return Shelters(player);
+				if (!player.state.hasShelter) return Shelters(player);
 				else return Shelters(); // 此处为函数重载
 			}
 			else if(temp == "5") return eat(player);
 			else if(temp == "6") return drink(player);
 			else if(temp == "7") return rest(player);
-			else if(temp == "8"){
+			else if(temp == "8") return showDate();
+			else if(temp == "9"){
 				string FileName;
 				cout << "输入你的存档名：";
 				cin >> FileName;
@@ -220,13 +256,14 @@ class GameSystem : public Event, public Map {
 				temp1 = 1;
 				return 0;
 			}
-			else if(temp == "9") return DrawAchievement(player);
-			else if(temp == "10"){
+			else if(temp == "10") return DrawAchievement(player);
+			else if(temp == "11"){
 				temp1 = 1;
 				isGameStart = 0;
 				Game();
-			}
-			else {
+			}else if(temp == "w" || temp == "W" || temp == "s" || temp == "S" || temp == "a" || temp == "A" || temp == "d" || temp == "D"){
+				player_move(temp[0], player);
+			}else {
 				temp1 = 1;
 				cout << "输入错误";
 				return 0;

@@ -1,4 +1,3 @@
-#include "constants.h"
 #include "interface.h"
 using namespace std;
 //采用彭++代码换行技术

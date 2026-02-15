@@ -97,7 +97,7 @@ class Player {
 				player.feel.ThirstLevel -= 2;
 				return 1;
 			} else {
-				cout << "材料不足";
+				cout << "材料不足" << endl;
 				return 0;
 			}
 		}
@@ -114,22 +114,10 @@ class Player {
 					cout << endl;
 				}
 				switch (_getch()) {
-					case 'w':
-					case 'W':
-						if (y > 0 && Shelter[y - 1][x] != '#') y--;
-						break;
-					case 's':
-					case 'S':
-						if (y < 4 && Shelter[y + 1][x] != '#') y++;
-						break;
-					case 'a':
-					case 'A':
-						if (x > 0 && Shelter[y][x - 1] != '#') x--;
-						break;
-					case 'd':
-					case 'D':
-						if (x < 4 && Shelter[y][x + 1] != '#') x++;
-						break;
+					case 'w':case 'W':if (y > 0 && Shelter[y - 1][x] != '#') y--;break;
+					case 's':case 'S':if (y < 4 && Shelter[y + 1][x] != '#') y++;break;
+					case 'a':case 'A':if (x > 0 && Shelter[y][x - 1] != '#') x--;break;
+					case 'd':case 'D':if (x < 4 && Shelter[y][x + 1] != '#') x++;break;
 				}
 				if (x == 3 && y == 2) {
 					temp1 = 1;
