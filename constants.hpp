@@ -49,7 +49,7 @@ struct Inventory {
 	int iron = 0;
 	int gold = 0;
 
-	int capacity = 10;
+	int capacity = 10; // 背包最大值
 };
 
 // 地图类型
@@ -217,12 +217,6 @@ void showProgressBar(int value, int maxValue, string name) {
 	for (int i = bars; i < 20; i++) cout << "■";
 	setColor(15);
 	cout << " " << value << "/" << maxValue << endl;
-}
-int getLR(int facing, bool LR){
-	for (int i = 0;i < 4;i++){
-		if (!LR) if (facing == L[i]) return i;
-		else {if (facing == R[i]) return i;}
-	}
 }
 
 typedef mapCell MC;

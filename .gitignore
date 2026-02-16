@@ -1,8 +1,13 @@
 *.exe
 *.obj
 *.bat
+*.sh
 *.sdp
 *.txt
+*.layout
+*.dev
+*.win
+Makefile
 /test/
 /.vscode/
-Makefile
+/.idea/

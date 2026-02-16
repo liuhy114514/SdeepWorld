@@ -1,7 +1,7 @@
 #include <conio.h>
-#include "Event.h"
-#include "Player.h"
-#include "map.h"
+#include "Event.hpp"
+#include "Player.hpp"
+#include "map.hpp"
 using namespace std;
 
 /*
@@ -95,7 +95,7 @@ class GameSys : public Event{
 			cout << oss.str();
 		}
 
-		double showDate() {
+		double showDate() { // 原来的日期被做成了手表功能
 			system("cls");
 			setColor(6);
 			cout << "---------------------------";
@@ -238,7 +238,7 @@ class GameSys : public Event{
 				}
 			}
 			while (player.feel.HealthLevel > 0) {
-				temp1 = 0;
+				temp1 = 0; // 重置是否触发随机事件的标志位
 				setColor(15);
 				self_check(player);
 				OutDate(player);

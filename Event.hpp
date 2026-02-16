@@ -1,5 +1,5 @@
-#include "Player.h"
-#include "constants.h"
+#include "Player.hpp"
+#include "constants.hpp"
 using namespace std;
 //这是事件
 class Event : public Player {
@@ -162,5 +162,4 @@ class WeatherAndSeasonSystem : Player { // and SeasonSystem
 			return humidity;
 		}
 };
-
 
