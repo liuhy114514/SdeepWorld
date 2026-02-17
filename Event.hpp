@@ -95,16 +95,15 @@ class Event : public Player {
 };
 
 //这是天气系统
-class WeatherAndSeasonSystem : Player { // and SeasonSystem
+class WeatherSys : Player { // and SeasonSystem
 	public:
 		Survivor player;
+		enum Season { SPRING, SUMMER, AUTUMN, WINTER };
+		enum Weather { SUNNY, RAINY, CLOUDY, SNOWY };
 		WeatherAndSeasonSystem(Survivor& player) {
 			this->player = player;
 		}
-	public:
-		enum Season { SPRING, SUMMER, AUTUMN, WINTER };
-		enum Weather { SUNNY, RAINY, CLOUDY };
-
+		
 	private:
 		Weather current = SUNNY;
 		Season currentSeason = SPRING;
@@ -149,11 +148,7 @@ class WeatherAndSeasonSystem : Player { // and SeasonSystem
 
 		string getWeather() const {
 			const std::array<const char*, 3> weatherNames = { "晴", "雨", "阴" };
-			const std::array<const char*, 4> seasonNames = { "春", "夏", "秋", "冬" };
-			return string(seasonNames[currentSeason]) + "季" + " " + weatherNames[current];
-		}
-		Season getSeason() const {
-			return currentSeason;
+			return string(weatherNames[current]) + "天";
 		}
 		float getTemperature() const { // 获取气温
 			return temp;
@@ -163,3 +158,6 @@ class WeatherAndSeasonSystem : Player { // and SeasonSystem
 		}
 };
 
+void weatherUpdate(){
+	
+}

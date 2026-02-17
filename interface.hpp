@@ -110,6 +110,7 @@ class GameSys : public Event{
 			cout << "---------------------------";
 			if (_getch() == 'q' || _getch() == 'Q') return 0;
 			cout << endl;
+			return 0;
 		}
 		void StartChoice(Survivor& player) {
 			string action;

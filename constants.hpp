@@ -104,6 +104,7 @@ struct World {
 	double date;
 	double temperature; //气温
 	double humidity; //湿度,须使用百分比
+	string weather;
 	mapCell maps[256][256] = {}; // 随机地图生成
 };
 

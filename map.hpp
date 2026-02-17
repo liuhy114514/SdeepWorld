@@ -45,7 +45,7 @@ class Map {
 			bool ty = fy > -1 && fy < 256;
 			// 绘制, 遍历玩家周围3x5的区域
 			for (int y = max(0, py - 1); y <= min(py + 1, 255); y++){
-				for (int x = max(0, px - 5); x <= min(px + 5, 255); x++) { 
+				for (int x = max(0, px - 2); x <= min(px + 2, 255); x++) { 
 					if (y == py && x == px){
 						setColor(boime[PLAYER].color);
 						cout << boime[PLAYER].c;
