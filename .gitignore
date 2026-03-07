@@ -4,8 +4,6 @@
 *.sh
 *.sdp
 *.txt
-*.layout
-*.dev
 *.win
 *.o
 Makefile
