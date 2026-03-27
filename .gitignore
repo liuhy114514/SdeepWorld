@@ -6,7 +6,6 @@
 *.txt
 *.win
 *.o
-Makefile
 /test/
 /.vscode/
 /.idea/

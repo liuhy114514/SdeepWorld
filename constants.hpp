@@ -3,13 +3,10 @@
 #include <iostream>
 #include <ctime>
 #include <cmath>
-#include <vector>
-#include <array>
 #include <iomanip>
-#include <iosfwd>
 #include <sstream>
-#include <windows.h>
 #include <algorithm>
+#include <windows.h>
 using namespace std;
 
 typedef const int cint;
