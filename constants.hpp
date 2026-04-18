@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
-#include <iostream>
 #include <ctime>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
 #include <algorithm>
-#include <windows.h>
+#include <thread>
+#include "color.hpp"
 using namespace std;
 
 typedef const int cint;
@@ -105,26 +105,6 @@ struct World {
 	mapCell maps[256][256] = {}; // 随机地图生成
 };
 
-const string USER_DATA_FILE = "user_data.txt";
-// 成就描述
-const string miaoshu[5] = {
-	"获得十个木头方可解锁",
-	"获得十个石头方可解锁",
-	"活过1天",
-	"背包满了时",
-	"生存能手"
-};
-//成就难度
-const string difficulty[2] = {
-	"简单",
-	"普通"
-};
-// 成就
-const string Achievement[3] = {
-	"  A  B  C  D  E     \n",
-	"  |  |  |  |  |     \n",
-	" -------------------\n",
-};
 const long long _time = time(NULL);
 cint TypeMax = 5; // 随机地形编号的最大值
 cint TypeMin = 1; // 随机地形编号的最小值
@@ -192,19 +172,6 @@ season The_Four_Seasons0[4] = { { 2.02, 5.07 },  { 5.07, 8.08  }, { 8.08, 11.08 
 World TW;
 
 // 函数
-/*
-0 = 黑色       8 = 灰色
-1 = 蓝色       9 = 淡蓝色
-2 = 绿色       A = 淡绿色
-3 = 浅绿色     B = 淡浅绿色
-4 = 红色       C = 淡红色
-5 = 紫色       D = 淡紫色
-6 = 黄色       E = 淡黄色
-7 = 白色       F = 亮白色
-*/
-void setColor(int color) {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
 void showProgressBar(int value, int maxValue, string name) {
 	setColor(11);
 	cout << name << ": ";
@@ -215,6 +182,13 @@ void showProgressBar(int value, int maxValue, string name) {
 	for (int i = bars; i < 20; i++) cout << "■";
 	setColor(15);
 	cout << " " << value << "/" << maxValue << endl;
+}
+
+void delay(int ms) {
+    clock_t start = clock();
+    double target_clocks = (double)ms * CLOCKS_PER_SEC / 1000.0;
+	volatile int dummy = 0;
+	while ((double)(clock() - start) < target_clocks) dummy++;
 }
 
 typedef mapCell MC;

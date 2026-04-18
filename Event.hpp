@@ -100,7 +100,7 @@ class WeatherSys : Player { // and SeasonSystem
 		Survivor player;
 		enum Season { SPRING, SUMMER, AUTUMN, WINTER };
 		enum Weather { SUNNY, RAINY, CLOUDY, SNOWY };
-		WeatherAndSeasonSystem(Survivor& player) {
+		WeatherSys(Survivor& player) {
 			this->player = player;
 		}
 		

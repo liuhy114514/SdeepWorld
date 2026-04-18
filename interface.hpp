@@ -7,10 +7,32 @@ using namespace std;
 当实现图形界面的时候关闭输入，把画面留给easyx
 */
 
+// 成就描述
+const string miaoshu[5] = {
+	"获得十个木头方可解锁",
+	"获得十个石头方可解锁",
+	"活过1天",
+	"背包满了时",
+	"生存能手"
+};
+//成就难度
+const string difficulty[2] = {
+	"简单",
+	"普通"
+};
+// 成就
+const string Achievement[3] = {
+	"  A  B  C  D  E     \n",
+	"  |  |  |  |  |     \n",
+	" -------------------\n",
+};
+
 //这是游戏系统，给玩家看的
 
 // getLR是用来获取当前朝向在L或者R数组的位置
 int getLR(int facing, bool LR);
+// 用来方便、统一成就输出的
+void AS(bool AState, string Aname, uchar message, uchar Difficulty = 0); // Achievement State成就状态的缩写
 
 class Map {
 	public:
@@ -92,39 +114,12 @@ class GameSys : public Event{
 					}
 				}
 				cout << "描述:";
-				if (playerx == 2 && playery == 0) {
-					cout << miaoshu[0];
-					if (pvp_dalao.state.TenWood) cout << "（已解锁）";
-					else cout << "（未解锁）";
-					cout << endl;
-					cout << "成就名：" << "“第一桶金(A)”" << endl << "难度：" << difficulty[0];
-				} else if (playerx == 5 && playery == 0) {
-					cout << miaoshu[1];
-					if (pvp_dalao.state.TenStone) cout << "（已解锁）";
-					else cout << "（未解锁）";
-					cout << endl;
-					cout << "成就名：" << "“我打水漂打的可多了！(B)”" << endl << "难度：" << difficulty[0];
-				} else if (playerx == 8 && playery == 0) {
-					cout << miaoshu[2];
-					if (pvp_dalao.state.Live_for_a_day) cout << "（已解锁）";
-					else cout << "（未解锁）";
-					cout << endl;
-					cout << "成就名：" << "感觉很轻松(C)" << endl << "难度：" << difficulty[0];
-				} else if (playerx == 11 && playery == 0) {
-					cout << miaoshu[3];
-					if (pvp_dalao.state.Bowl_full_of_blood) cout << "（已解锁）";
-					else cout << "（未解锁）";
-					cout << endl;
-					cout << "成就名：" << "钵满血满(D)" << endl << "难度：" << difficulty[1];
-				} else if (playerx == 14 && playery == 0) {
-					cout << miaoshu[4];
-					if (pvp_dalao.state.Survival_expert) cout << "（已解锁）";
-					else cout << "（未解锁）";
-					cout << endl;
-					cout << "成就名：" << "生存小能手！(E)" << endl << "难度：" << difficulty[0];
-				} else {
-					cout << "无" << endl;
-				}
+				if (playerx == 2 && playery == 0)  			AS(pvp_dalao.state.TenWood, "“第一桶金(A)”", 0);
+				else if (playerx == 5 && playery == 0) 		AS(pvp_dalao.state.TenStone, "“我打水漂打的可多了！(B)”", 1);
+				else if (playerx == 8 && playery == 0) 		AS(pvp_dalao.state.Live_for_a_day, "感觉很轻松(C)", 2);
+				else if (playerx == 11 && playery == 0) 	AS(pvp_dalao.state.Bowl_full_of_blood, "钵满血满(D)", 3, 1);
+				else if (playerx == 14 && playery == 0) 	AS(pvp_dalao.state.Survival_expert, "生存小能手！(E)", 4);
+				else 										cout << "无" << endl;
 				// 获取按键输入
 				switch (_getch()) {
 					case 'w':case 'W':if (playery > 0) playery--;break;
@@ -325,4 +320,11 @@ int getLR(int facing, bool LR){
 		if (!LR) if (facing == L[i]) return i;
 		else {if (facing == R[i]) return i;}
 	}
+}
+void AS(bool AState, string Aname, uchar message, uchar Difficulty){ // 成就状态（解没解锁）、成就名、描述、难度
+	cout << miaoshu[message];
+	if (AState) cout << "（已解锁）";
+	else cout << "（未解锁）";
+	cout << endl;
+	cout << "成就名：" << Aname << endl << "难度：" << difficulty[Difficulty];
 }

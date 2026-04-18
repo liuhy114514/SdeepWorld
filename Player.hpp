@@ -161,7 +161,7 @@ void ToDoSth(Survivor &player, int Hunger, int Thirst, string message, Value *rs
 double cd(string message, bool randomEvent){ // 因为返回时间采用分钟小时统一用小数表达，为了返回值统一
 	system("cls");
 	cout << message;
-	Sleep(1000);
+	delay(1000);
 	system("cls");
 	temp1 = randomEvent;
 	return 0;
