@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
+#include <stdio.h>
 #include <ctime>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
 #include <algorithm>
 #include <thread>
-#include "color.hpp"
+#include "include/color.hpp"
 using namespace std;
 
 typedef const int cint;
@@ -83,6 +84,7 @@ struct TimerStruct {
 //玩家结构体
 struct Survivor {
 	string name;
+	string password;
 	string playerFacing; // 朝向位置的东西
 	int level = 1;
 	int px = 128, py = 128;
@@ -117,6 +119,7 @@ const string item[10] = {
 	"金",
 	"水",
 };
+const string userFile = "user_info.txt";
 const mapCell boime[10] = {
 	{-1, "player", '*', 0x0F},
 	{0, "空", '.', 0x07},
@@ -168,20 +171,21 @@ char Shelter[5][6] = { // 字符串以\0结尾
 	"#...#",
 	"#####",
 };
+
 season The_Four_Seasons0[4] = { { 2.02, 5.07 },  { 5.07, 8.08  }, { 8.08, 11.08 }, { 11.08, 2.02 } };    // [a,b)
 World TW;
 
 // 函数
 void showProgressBar(int value, int maxValue, string name) {
 	setColor(11);
-	cout << name << ": ";
+	printf("%s%c",name.c_str(),": ");
 	int bars = value * 20 / maxValue;
 	setColor(10);
-	for (int i = 0; i < bars; i++) cout << "■";
+	for (int i = 0; i < bars; i++) printf("■");
 	setColor(8);
-	for (int i = bars; i < 20; i++) cout << "■";
+	for (int i = bars; i < 20; i++) printf("■");
 	setColor(15);
-	cout << " " << value << "/" << maxValue << endl;
+	printf(" %d/%d\n",value, maxValue);
 }
 
 void delay(int ms) {

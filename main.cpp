@@ -8,7 +8,7 @@ int main() {
 		GameSys gs = GameSys();
 		gs.Game();
 	} catch(...){
-		cout << "游戏出错";
+		printf("游戏出错");
 		system("pause");
 		exit(0);
 	}

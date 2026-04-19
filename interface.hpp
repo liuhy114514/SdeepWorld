@@ -1,6 +1,6 @@
 #include "Event.hpp"
 #include "Player.hpp"
-#include <conio.h>
+#include "include/getkey.hpp"
 using namespace std;
 
 /*
@@ -157,10 +157,10 @@ class GameSys : public Event{
 			setColor(6);
 			cout << "---------------------------";
 			cout << "季节：";
-			if (TW.Season == 0)	cout << "春天" << endl;
+			if (TW.Season == 0)			cout << "春天" << endl;
 			else if (TW.Season == 1)	cout << "夏天" << endl;
 			else if (TW.Season == 2)	cout << "秋天" << endl;
-			else				cout << "冬天" << endl;
+			else						cout << "冬天" << endl;
 			cout << "第" << TW.year << "年" << " " << "第" << TW.month << "月" << " " << "第" << TW.day << "天" << endl;
 			cout << "当前时间：" << int(TW.date) << "月" << (TW.date - int(TW.date)) * 100 << "日" << " ";
 			showTime(TW.time);
@@ -169,12 +169,15 @@ class GameSys : public Event{
 			cout << endl;
 			return 0;
 		}
+		void Login(){
+			cout << "★ 荒岛求生 ★\n";
+			cout << "1.离线模式\n2.登录\n3.注册\n4.退出\n选择：";
+			
+		}
 		void StartChoice(Survivor& player) {
 			string action;
 
 			while (true) {
-				system("cls");
-
 				system("cls");
 				cout << "★ 荒岛求生 ★\n";
 				cout << "1.新游戏\n2.读取存档\n3.退出\n选择：";
@@ -218,8 +221,6 @@ class GameSys : public Event{
 			showProgressBar(player.feel.ThirstLevel, 100, "口渴");
 
 			cout << endl;
-			
-			map.drawMap(TW.maps, player, player.px, player.py);
 
 			setColor(11);
 			cout << "资源：木材:" << player.inventory.wood
