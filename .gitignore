@@ -6,6 +6,12 @@
 *.txt
 *.win
 *.o
+*.win
+*.dev
+*.layout
+*.bookmarks
+*.debug
 /test/
 /.vscode/
 /.idea/
+/ComLog/

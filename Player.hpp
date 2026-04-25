@@ -1,7 +1,7 @@
 #pragma once
 #include "constants.hpp"
 #include "SaveSystem.hpp"
-#include <conio.h>
+#include "include/getkey.hpp"
 using namespace std;
 
 /*
